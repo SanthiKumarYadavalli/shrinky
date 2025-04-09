@@ -1,0 +1,125 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 215 32% 12%; /* Dark blue-gray */
+    --foreground: 216 100% 97%;
+
+    --card: 217 33% 17%; /* Slightly lighter dark blue */
+    --card-foreground: 216 100% 97%;
+
+    --popover: 215 32% 12%;
+    --popover-foreground: 216 100% 97%;
+
+    --primary: 216 100% 60%; /* Vibrant blue */
+    --primary-foreground: 216 100% 97%;
+
+    --secondary: 217 19% 27%; /* Muted blue-gray */
+    --secondary-foreground: 216 100% 97%;
+
+    --muted: 217 19% 27%;
+    --muted-foreground: 215 20% 75%;
+
+    --accent: 262 83% 58%; /* Purple */
+    --accent-foreground: 216 100% 97%;
+
+    --destructive: 0 84% 60%; /* Red */
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 19% 27%;
+    --input: 217 19% 27%;
+    --ring: 216 100% 60%;
+    --radius: 0.75rem;
+
+    /* Sidebar colors */
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 216 100% 97%;
+    --sidebar-primary: 216 100% 60%;
+    --sidebar-primary-foreground: 216 100% 97%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 216 100% 97%;
+    --sidebar-border: 217 19% 27%;
+    --sidebar-ring: 216 100% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    background-image: radial-gradient(
+      circle at top right,
+      hsl(262 83% 20% / 0.15),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      hsl(216 100% 30% / 0.1),
+      transparent 40%
+    );
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .dashboard-card {
+    @apply bg-card rounded-lg border border-border p-4 shadow-sm transition-all hover:shadow-md hover:shadow-primary/5;
+  }
+  
+  .stats-value {
+    @apply text-2xl font-bold text-primary;
+  }
+  
+  .stats-label {
+    @apply text-sm text-muted-foreground;
+  }
+  
+  .link-item {
+    @apply hover:bg-secondary/50 transition-colors duration-200;
+  }
+
+  .shimmer {
+    @apply relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent;
+  }
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .loading-spinner {
+    @apply animate-pulse-opacity;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.gradient-text {
+  @apply bg-gradient-to-r from-primary via-accent to-dashboard-success bg-clip-text text-transparent;
+}
+
+.card-gradient {
+  @apply bg-gradient-to-br from-card to-secondary/80 backdrop-blur-sm;
+}
+
+.button-gradient {
+  @apply bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 transition-all duration-300;
+}
+
+.header-gradient {
+  @apply bg-gradient-to-r from-primary to-accent text-transparent bg-clip-text;
+}
