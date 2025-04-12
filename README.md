@@ -1,6 +1,3 @@
-Certainly! Here's a comprehensive `README.md` for your Shrinky project:
-
----
 
 # Shrinky
 
