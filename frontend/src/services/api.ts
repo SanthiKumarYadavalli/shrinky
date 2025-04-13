@@ -7,6 +7,7 @@ import {
 
 
 export const API_URL = "https://shrinkee.vercel.app"
+export const WS_URL = "ws://shrinkee.vercel.app"
 
 // Login
 export const login = async (email: string, password: string): Promise<{ token: string }> => {

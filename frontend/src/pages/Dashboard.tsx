@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import useWebSocket from "react-use-websocket"
+import { jwtDecode, JwtPayload } from "jwt-decode";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,7 +14,16 @@ import {
 } from "lucide-react";
 import LinkTable from "@/components/LinkTable";
 import { Link } from "@/types";
-import { fetchLinks } from "@/services/api";
+import { fetchLinks, WS_URL } from "@/services/api";
+
+interface MyJwtPayload extends JwtPayload {
+  id: string;
+}
+
+interface MessageData {
+  type: string;
+  urlId: string;
+}
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +34,37 @@ const Dashboard = () => {
     activeLinks: 0,
     expiredLinks: 0
   });
+  const decoded = jwtDecode(localStorage.getItem("token")) as MyJwtPayload;
+
+  //websocket
+  const { sendJsonMessage, lastJsonMessage } = useWebSocket(
+    WS_URL,
+    {
+      onOpen: () => {
+        sendJsonMessage({
+          type: "register",
+          userId: decoded.id,
+        })
+      }
+    }
+  );
+
+  useEffect(() => {
+    if (lastJsonMessage != null) {
+      const { type, urlId } = lastJsonMessage as MessageData;
+      if (type === "clicks_increment") {
+        setLinks(prev => prev.map(link =>
+          link._id === urlId ? {...link, totalClicks: link.totalClicks + 1 } : link
+        ));
+        setStats(prev => ({
+          ...prev,
+          totalClicks: prev.totalClicks + 1
+        }));
+      }
+    }
+  }, [lastJsonMessage])
   
+
   useEffect(() => {
     const fetchData = async () => {
       try {
